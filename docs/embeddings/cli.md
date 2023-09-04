@@ -3,7 +3,7 @@
 
 LLM provides command-line utilities for calculating and storing embeddings for pieces of content.
 
-(embeddings-cli-embed)=
+(embeddings-llm-embed)=
 ## llm embed
 
 The `llm embed` command can be used to calculate embedding vectors for a string of content. These can be returned directly to the terminal, stored in a SQLite database, or both.
@@ -110,7 +110,7 @@ llm similar phrases -c 'hound'
 {"id": "hound", "score": 0.8484683588631485, "content": "my happy hound", "metadata": {"name": "Hound"}}
 ```
 
-(embeddings-cli-embed-multi)=
+(embeddings-llm-embed-multi)=
 ## llm embed-multi
 
 The `llm embed` command embeds a single string at a time.
@@ -130,7 +130,7 @@ All three mechanisms support these options:
 - `--store` to store the original content in the embeddings table in addition to the embedding vector
 - `--prefix` to prepend a prefix to the stored ID of each item
 
-(embeddings-cli-embed-multi-csv-etc)=
+(embeddings-llm-embed-multi-csv-etc)=
 ### Embedding data from a CSV, TSV or JSON file
 
 You can embed data from a CSV, TSV or JSON file using the `-i/--input` option.
@@ -188,7 +188,7 @@ llm embed-multi items \
   --store
 ```
 
-(embeddings-cli-embed-multi-sqlite)=
+(embeddings-llm-embed-multi-sqlite)=
 ### Embedding data from a SQLite database
 
 You can embed data from a SQLite database using `--sql`, optionally combined with `--attach` to attach an additional database.
@@ -213,7 +213,7 @@ llm embed-multi docs \
   -m ada-002
 ```
 
-(embeddings-cli-embed-multi-directories)=
+(embeddings-llm-embed-multi-directories)=
 ### Embedding data from files in directories
 
 LLM can embed the content of every text file in a specified directory, using the file's path and name as the ID.
@@ -284,8 +284,6 @@ llm-docs/plugins/index.md
 ## llm similar
 
 The `llm similar` command searches a collection of embeddings for the items that are most similar to a given or item ID.
-
-This currently uses a slow brute-force approach which does not scale well to large collections. See [issue 216](https://github.com/simonw/llm/issues/216) for plans to add a more scalable approach via vector indexes provided by plugins.
 
 To search the `quotations` collection for items that are semantically similar to `'computer science'`:
 
