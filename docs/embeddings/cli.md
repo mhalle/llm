@@ -133,7 +133,7 @@ All three mechanisms support these options:
 (embeddings-cli-embed-multi-csv-etc)=
 ### Embedding data from a CSV, TSV or JSON file
 
-You can embed data from a CSV, TSV or JSON file using the `-i/--input` option.
+You can embed data from a CSV, TSV or JSON file by passing that file to the command as the second option, after the collection name.
 
 Your file must contain at least two columns. The first one is expected to contain the ID of the item, and any subsequent columns will be treated as containing content to be embedded.
 
@@ -161,28 +161,27 @@ Or as newline-delimited JSON like this:
 ```
 In each of these cases the file can be passed to `llm embed-multi` like this:
 ```bash
-llm embed-multi items -i mydata.csv
+llm embed-multi items mydata.csv
 ```
-The first argument is the name of the collection, then the `-i/--input` option is used to specify the file.
+The first argument is the name of the collection, the second is the filename.
 
-You can also pipe content to standard input of the tool using `-i -`:
+You can also pipe content to standard input of the tool using `-`:
 
 ```bash
-cat mydata.json | llm embed-multi items -i -
+cat mydata.json | llm embed-multi items -
 ```
 LLM will attempt to detect the format of your data automatically. If this doesn't work you can specify the format using the `--format` option. This is required if you are piping newline-delimited JSON to standard input.
 
 ```bash
-cat mydata.json | llm embed-multi items -i - --format nl
+cat mydata.json | llm embed-multi items - --format nl
 ```
 Other supported `--format` options are `csv`, `tsv` and `json`.
 
 This example embeds the data from a JSON file in a collection called `items` in database called `docs.db` using the `ada-002` model and stores the original content in the `embeddings` table as well, adding a prefix of `my-items/` to each ID:
 
 ```bash
-llm embed-multi items \
+llm embed-multi items mydata.json \
   -d docs.db \
-  -i mydata.json \
   -m ada-002 \
   --prefix my-items/ \
   --store
@@ -256,7 +255,7 @@ plugins/index.md
 ```
 Each corresponding to embedded content for the file in question.
 
-The `--prefix` option can be useful here to add a prefix to each ID:
+The `--prefix` option can be used to add a prefix to each ID:
 
 ```bash
 llm embed-multi documentation \
@@ -279,6 +278,19 @@ llm-docs/logging.md
 llm-docs/plugins/directory.md
 llm-docs/plugins/index.md
 ```
+Files are assumed to be `utf-8`, but LLM will fall back to `latin-1` if it encounters an encoding error. You can specify a different set of encodings using the `--encoding` option.
+
+This example will try `utf-16` first and then `mac_roman` before falling back to `latin-1`:
+```
+llm embed-multi documentation \
+  -m ada-002 \
+  --files docs '**/*.md' \
+  -d documentation.db \
+  --encoding utf-16 \
+  --encoding mac_roman \
+  --encoding latin-1
+```
+If a file cannot be read it will be logged to standard error but the script will keep on running.
 
 (embeddings-cli-similar)=
 ## llm similar
