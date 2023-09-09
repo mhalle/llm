@@ -473,11 +473,12 @@ Usage: llm embed [OPTIONS] [COLLECTION] [ID]
   Embed text and store or return the result
 
 Options:
-  -i, --input FILENAME            File to embed
+  -i, --input PATH                File to embed
   -m, --model TEXT                Embedding model to use
   --store                         Store the text itself in the database
   -d, --database FILE
   -c, --content FILE              Content to embed
+  --binary                        Treat input as binary data
   --metadata TEXT                 JSON object metadata to store
   -f, --format [json|blob|base64|hex]
                                   Output format
@@ -508,6 +509,7 @@ Options:
   --files <DIRECTORY TEXT>...  Embed files in this directory - specify directory
                                and glob pattern
   --encoding TEXT              Encoding to use when reading --files
+  --binary                     Treat --files as binary data
   --sql TEXT                   Read input using this SQL query
   --attach <TEXT FILE>...      Additional databases to attach - specify alias
                                and file path
